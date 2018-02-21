@@ -158,6 +158,11 @@
 -define:ENABLE_VSTU
 'Assets/Scripts/Chest.cs'
 'Assets/Scripts/DailyReward.cs'
+'Assets/Scripts/NtpServerConnectionManager.cs'
+'Assets/Tutorials/NtpServer/Scripts/NtpServer/Chest.cs'
+'Assets/Tutorials/NtpServer/Scripts/NtpServer/ChestManager.cs'
+'Assets/Tutorials/NtpServer/Scripts/NtpServer/DataManager.cs'
+'Assets/Tutorials/NtpServer/Scripts/NtpServer/Timer.cs'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Xml.Linq.dll'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/UnityScript.dll'
