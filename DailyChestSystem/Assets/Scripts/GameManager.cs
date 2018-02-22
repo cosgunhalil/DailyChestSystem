@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour {
 
     public DataManager _dataManager;
     public TimeManager _timeManager;
-    public NtpServerConnectionManager _ntpServerConnectionManager;
     public ChestManager _chestManager;
 
 	// Use this for initialization
@@ -18,5 +17,15 @@ public class GameManager : MonoBehaviour {
         {
             Instance = this;
         }
+
+        _dataManager.Init();
+        Debug.Log("Last closed time = " + _dataManager.GetAppLastClosingTime());
+        Debug.Log("Now = " + NtpServerConnectionManager.Instance.GetTime());
 	}
+
+    private void OnApplicationQuit()
+    {
+        _dataManager.SaveAppLastClosingTime();
+    }
+
 }

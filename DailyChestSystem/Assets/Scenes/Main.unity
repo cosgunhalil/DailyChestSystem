@@ -270,7 +270,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dataManager: {fileID: 2111923697}
   _timeManager: {fileID: 2111923700}
-  _ntpServerConnectionManager: {fileID: 2111923696}
   _chestManager: {fileID: 2111923699}
 --- !u!114 &2111923699
 MonoBehaviour:
@@ -284,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Chests: []
-  DataController: {fileID: 0}
+  DataController: {fileID: 2111923697}
 --- !u!114 &2111923700
 MonoBehaviour:
   m_ObjectHideFlags: 0

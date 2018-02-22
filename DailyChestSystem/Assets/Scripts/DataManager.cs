@@ -12,13 +12,13 @@ public class DataManager : MonoBehaviour {
 
     public void Init()
     {
-        _dataFileName = "data.json";
-        _gameDataFilePath = "/StreamingAssets/data.json";
+        _dataFileName = "data.txt";
+        _gameDataFilePath = "/Data/data.txt";
     }
 
     public DateTime GetAppLastClosingTime()
     {
-        var filePath = Path.Combine(Application.streamingAssetsPath, _dataFileName);
+        var filePath = Application.dataPath + _gameDataFilePath;
         DateTime appLastClosingTime = DateTime.MinValue;
 
         if (File.Exists(filePath))
@@ -34,8 +34,6 @@ public class DataManager : MonoBehaviour {
                 loadedData.Minute, 
                 loadedData.Second
             );
-
-            Debug.Log(appLastClosingTime);
         }
 
         return appLastClosingTime;
@@ -57,11 +55,20 @@ public class DataManager : MonoBehaviour {
 
         Debug.Log(gameData.GetDate());
 
-        var gameDataJson = JsonUtility.ToJson(gameData);
-        Debug.Log(gameDataJson);
+        var gameDataString = JsonUtility.ToJson(gameData);
+        Debug.Log(gameDataString);
 
         var filePath = Application.dataPath + _gameDataFilePath;
-        File.WriteAllText(filePath, gameDataJson);
+        File.WriteAllText(filePath, gameDataString);
+
+        using (FileStream fs = new FileStream(filePath, FileMode.Create))
+        {
+            using (StreamWriter writer = new StreamWriter(fs))
+            {
+                writer.Write(gameDataString);
+            }
+
+        }
     }
 }
 

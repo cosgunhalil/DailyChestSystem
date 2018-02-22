@@ -11,7 +11,7 @@ public class ChestManager : MonoBehaviour {
     private DateTime _appLastClosingTime;
     private DateTime _appCurrentOpeningTime;
 
-    public void Start()
+    public void Init()
     {
         DataController.Init();
         SetAppLastClosingTime();
@@ -25,10 +25,5 @@ public class ChestManager : MonoBehaviour {
         {
             _appLastClosingTime = NtpServerConnectionManager.Instance.GetTime();
         }
-    }
-
-    public void OnDestroy()
-    {
-        DataController.SaveAppLastClosingTime();
     }
 }
