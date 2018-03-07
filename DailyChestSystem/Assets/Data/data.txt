@@ -1,1 +1,1 @@
-{"Year":2018,"Mounth":2,"Day":22,"Hour":15,"Minute":26,"Second":28}
+{"LastClosingTimeContainer":{"Year":2018,"Mounth":3,"Day":7,"Hour":12,"Minute":6,"Second":43},"DailyRewardData":{"SecondsToUnlock":284}}

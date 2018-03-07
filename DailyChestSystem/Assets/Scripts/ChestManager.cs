@@ -19,7 +19,7 @@ public class ChestManager : MonoBehaviour {
 
     private void SetAppLastClosingTime()
     {
-        _appLastClosingTime = DataController.GetAppLastClosingTime();
+        _appLastClosingTime = DataController.GetLastActiveTimeData();
 
         if (_appLastClosingTime == DateTime.MinValue)
         {

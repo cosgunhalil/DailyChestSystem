@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +8,8 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance;
 
     public DataManager _dataManager;
-    public TimeManager _timeManager;
-    public ChestManager _chestManager;
+    public DailyReward _dailyReward;
 
-	// Use this for initialization
 	void Start () 
     {
         if (Instance == null)
@@ -19,13 +18,25 @@ public class GameManager : MonoBehaviour {
         }
 
         _dataManager.Init();
-        Debug.Log("Last closed time = " + _dataManager.GetAppLastClosingTime());
-        Debug.Log("Now = " + NtpServerConnectionManager.Instance.GetTime());
+        _dailyReward.Init(CalculateClosedAppSeconds(), _dataManager.GetAppData().DailyRewardData.SecondsToUnlock);
 	}
+
+    private int CalculateClosedAppSeconds()
+    {
+        var lastActiveTime = _dataManager.GetLastActiveTimeData();
+        var currentTime = NtpServerConnectionManager.Instance.GetTime();
+        var differance = currentTime - lastActiveTime;
+
+        Debug.Log("Last closed time = " + lastActiveTime);
+        Debug.Log("Now = " + currentTime);
+        Debug.Log("Difference = " + (int)differance.TotalSeconds);
+
+        return (int)differance.TotalSeconds;
+    }
 
     private void OnApplicationQuit()
     {
-        _dataManager.SaveAppLastClosingTime();
+        _dataManager.SaveAppData();
     }
 
 }

@@ -8,6 +8,7 @@ public class DataManager : MonoBehaviour {
 
     private string _dataFileName;
     private string _gameDataFilePath;
+    private GameData _gameData;
 
 
     public void Init()
@@ -16,35 +17,54 @@ public class DataManager : MonoBehaviour {
         _gameDataFilePath = "/Data/data.txt";
     }
 
-    public DateTime GetAppLastClosingTime()
+    public DateTime GetLastActiveTimeData()
     {
-        var filePath = Application.dataPath + _gameDataFilePath;
+        
         DateTime appLastClosingTime = DateTime.MinValue;
 
-        if (File.Exists(filePath))
+        if (_gameData == null)
         {
-            var dataString = File.ReadAllText(filePath);
-            var loadedData = JsonUtility.FromJson<GameData>(dataString);
-
-            appLastClosingTime = new DateTime(
-                loadedData.Year, 
-                loadedData.Mounth, 
-                loadedData.Day, 
-                loadedData.Hour, 
-                loadedData.Minute, 
-                loadedData.Second
-            );
+            LoadGameData();
         }
+            appLastClosingTime = new DateTime(
+                _gameData.LastClosingTimeContainer.Year, 
+                _gameData.LastClosingTimeContainer.Mounth, 
+                _gameData.LastClosingTimeContainer.Day, 
+                _gameData.LastClosingTimeContainer.Hour, 
+                _gameData.LastClosingTimeContainer.Minute, 
+                _gameData.LastClosingTimeContainer.Second
+            );
 
         return appLastClosingTime;
     }
 
-    public void SaveAppLastClosingTime()
+    public GameData GetAppData()
+    {
+        if (_gameData == null)
+        {
+            LoadGameData();
+        }
+
+        return _gameData;
+    }
+
+    private void LoadGameData()
+    {
+        var filePath = Application.dataPath + _gameDataFilePath;
+
+        if (File.Exists(filePath))
+        {
+            var dataString = File.ReadAllText(filePath);
+            _gameData = JsonUtility.FromJson<GameData>(dataString);
+        }
+    }
+
+    public void SaveAppData()
     {
         var gameData = new GameData();
         var dateTime = NtpServerConnectionManager.Instance.GetTime();
 
-        gameData.SetDate(
+        gameData.LastClosingTimeContainer.SetDate(
             dateTime.Year, 
             dateTime.Month, 
             dateTime.Day,
@@ -53,7 +73,9 @@ public class DataManager : MonoBehaviour {
             dateTime.Second
         ); 
 
-        Debug.Log(gameData.GetDate());
+        Debug.Log(gameData.LastClosingTimeContainer.GetDate());
+
+        gameData.DailyRewardData.SecondsToUnlock = GameManager.Instance._dailyReward.GetSecondsToUnlock();
 
         var gameDataString = JsonUtility.ToJson(gameData);
         Debug.Log(gameDataString);
@@ -67,7 +89,6 @@ public class DataManager : MonoBehaviour {
             {
                 writer.Write(gameDataString);
             }
-
         }
     }
 }
@@ -75,15 +96,28 @@ public class DataManager : MonoBehaviour {
 [Serializable]
 public class GameData
 {
+    public LastAppClosingTimeContainer LastClosingTimeContainer;
+    public DailyRewardDataContainer DailyRewardData;
 
+    public GameData()
+    {
+        LastClosingTimeContainer = new LastAppClosingTimeContainer();
+        DailyRewardData = new DailyRewardDataContainer();
+    }
+
+}
+
+[Serializable]
+public class LastAppClosingTimeContainer
+{
     public int Year;
-	public int Mounth;
-	public int Day;
+    public int Mounth;
+    public int Day;
     public int Hour;
     public int Minute;
     public int Second;
 
-    public void SetDate(int year , int month, int day, int hour, int minute, int second)
+    public void SetDate(int year, int month, int day, int hour, int minute, int second)
     {
         Day = day;
         Mounth = month;
@@ -95,7 +129,14 @@ public class GameData
 
     public DateTime GetDate()
     {
-        var date = new DateTime(Year,Mounth,Day,Hour,Minute,Second);
+        var date = new DateTime(Year, Mounth, Day, Hour, Minute, Second);
         return date;
     }
 }
+
+[Serializable]
+public class DailyRewardDataContainer
+{
+    public int SecondsToUnlock;
+}
+
